@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -9,28 +8,28 @@ import { catchError, map, tap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root'})
 export class HeroService {
   
-  private heroesUrl = 'api/heroes';  // URL to web api
+  private heroesUrl = 'api/heroes';  // URL для Web API
   
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   
   /**
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
+ * Обработка сбойной операции Http.
+ * Дать приложению продолжить.
+ * @param operation - название неудачной операции
+ * @param result - необязательное значение, возвращаемое как наблюдаемый результат
  */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
+    // TODO: отправить ошибку в удаленный лог
+    console.error(error);
 
-    // TODO: better job of transforming error for user consumption
+    // TODO: улучшенная работа по преобразованию ошибки для инфы пользователям
     this.log(`${operation} failed: ${error.message}`);
 
-    // Let the app keep running by returning an empty result.
+    // Пусть приложение продолжит работу, вернув пустой результат.
     return of(result as T);
   };
 }
@@ -40,7 +39,7 @@ export class HeroService {
     private messageService: MessageService
     ) { }
 
-  /** GET heroes from the server */
+  /** GET heroes с сервера */
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
     .pipe(
@@ -57,7 +56,7 @@ export class HeroService {
     );
   }
 
-  /** PUT: update the hero on the server */
+  /** PUT: апдейт героев на сервере */
 updateHero(hero: Hero): Observable<any> {
   return this.http.put(this.heroesUrl, hero, this.httpOptions)
   .pipe(
@@ -66,12 +65,12 @@ updateHero(hero: Hero): Observable<any> {
   );
 }
 
-  /** Log a HeroService message with the MessageService */
+  /** Log HeroService сообщения в MessageService */
   private log(message: string) {
   this.messageService.add(`HeroService: ${message}`);
 }
 
-/** POST: add a new hero to the server */
+/** POST: добавить нового героя на сервер */
 addHero(hero: Hero): Observable<Hero> {
   return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions)
   .pipe(
@@ -92,7 +91,7 @@ deleteHero(hero: Hero | number): Observable<Hero> {
 
 searchHeroes(term: string): Observable<Hero[]> {
   if (!term.trim()) {
-    // if not search term, return empty hero array.
+    // если не поисковый запрос, вернуть массив героев.
     return of([]);
   }
   return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`)
